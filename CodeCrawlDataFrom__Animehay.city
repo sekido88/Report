@@ -1,1 +1,46 @@
 
+import requests
+import pandas as pd
+from bs4 import BeautifulSoup
+
+def getElement(arr , elm)  :
+    for i in elm :
+        arr.append(i.text)
+
+ListExcel = []
+def function (url , index) : 
+  
+    page = requests.get(url) 
+    soup = BeautifulSoup(page.text , "html.parser")
+
+    name = soup.find_all('div' , {'class' : 'name-movie'})
+    episode = soup.find_all('div',{'class' : 'episode-latest'})
+    score = soup.find_all('div',{'class' : 'score'})
+
+    arr_name = []
+    arr_episode = []
+    arr_score = []
+    getElement(arr_name,name)
+    getElement(arr_episode,episode)
+    getElement(arr_score,score)
+    for i in range(len(arr_name)) :
+
+        arr_tmp = []
+        arr_tmp.append(arr_name[i])
+        arr_tmp.append(arr_episode[i])
+        arr_tmp.append(arr_score[i])
+        ListExcel.append(arr_tmp)
+
+    # columns = ['Name' , 'Episode'  , 'Score' ]
+    # excel = pd.DataFrame(mer,columns = columns)
+    # excel_file = 'data.xlsx'
+   
+    
+for  index in range(2,10) :
+    url = "https://animehay.city/the-loai/anime-1/trang-"+str(index)+".html"
+    function(url , index)
+
+columns = ['Name' , 'Episode'   , 'Score'  ]
+excel = pd.DataFrame(ListExcel,columns = columns)
+excel_file = 'data.xlsx'
+excel.to_excel(excel_file , index = False)
