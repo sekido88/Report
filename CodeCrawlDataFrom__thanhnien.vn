@@ -1,0 +1,20 @@
+Matrix2d = []
+countIndex = 1
+import requests
+import pandas as pd
+from bs4 import BeautifulSoup
+url ="https://thanhnien.vn/"
+page = requests . get(url) 
+soup = BeautifulSoup(page.text , "html.parser")
+p_tags = soup.find_all('h3') 
+for ptag in p_tags:
+    a_tag = ptag.find('a')
+    if (a_tag) : 
+      News = []
+      News.append(countIndex) 
+      News.append(a_tag.get('title'))
+      countIndex += 1  
+      Matrix2d.append(News) 
+columns = ['Index' , 'News']
+excel = pd.DataFrame(Matrix2d,columns = columns)
+print(excel)
